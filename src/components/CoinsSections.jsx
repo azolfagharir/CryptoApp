@@ -19,11 +19,10 @@ export default function CoinsSections({id,symbol, image, price,
               <h2>{symbol}</h2>
             </div>
             <h2>{id}</h2>
-            <h2>${price}</h2>
-            <h2>{twenyfourh}%</h2>
+            <h2>${price.toLocaleString()}</h2>
+            <h2 className={`${twenyfourh > 0 ? "text-green-700":"text-red-700"}`}>{twenyfourh.toFixed(2)}%</h2>
             <h2>{totalvolume}</h2>
-            {twenyfourh > 0 && <img src={chartUpp} alt={chartUpp} />}
-            {twenyfourh < 0 && <img src={chartdown} alt={chartdown} />} 
+            {twenyfourh > 0 ? <img src={chartUpp} alt={chartUpp}/> :  <img src={chartdown} alt={chartdown} />}
           </div>
         </>
        )
