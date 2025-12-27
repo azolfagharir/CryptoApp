@@ -1,19 +1,15 @@
 import { useState, useEffect } from "react";
 import closeIcon from "E:/frontend/CryptoApp/public/close-icon.png";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  CartesianGrid,
-} from "recharts";
+
+import Chart from "./Chart";
 
 
-
-
-export default function ShowStatics({ idStatics, setShow, show}) {
+export default function ShowStatics({ idStatics, setShow, show }) {
+    const getCurrentTotalVolume = () => {
+    return chartData.market_cap && chartData.market_cap.length > 0
+      ? chartData.market_cap[0][1]  
+      : 0;
+  };
   const [eachcoin, setEachCoin] = useState([]);  
   const [chartData, setChartData] = useState({ prices: [], market_cap: [], total_volumes: [] });
   const [statisticTyp, setStatisticType] = useState("prices");
@@ -30,10 +26,10 @@ const formattedChartData = chartData.prices.map((item, index) => ({
   useEffect(() => {
     const FetchingData = async () => {
       try {
-        const response = await fetch(`https://api.coingecko.com/api/v3/coins/${idStatics}`);
+        const response = await fetch(`https://api.coingecko.com/api/v3/coins/${idStatics.id}`);
         const json = await response.json();
         setEachCoin(json);  
-        const chartResponse = await fetch(`https://api.coingecko.com/api/v3/coins/${idStatics}/market_chart?vs_currency=usd&days=7`);
+        const chartResponse = await fetch(`https://api.coingecko.com/api/v3/coins/${idStatics.id}/market_chart?vs_currency=usd&days=7`);
         const chartData = await chartResponse.json();
         setChartData({
           prices: chartData.prices,
@@ -45,7 +41,7 @@ const formattedChartData = chartData.prices.map((item, index) => ({
       }
     };
     FetchingData();
-  }, [idStatics]);
+  }, [idStatics.id]);
 
   return (
   eachcoin?.id ? (
@@ -54,26 +50,16 @@ const formattedChartData = chartData.prices.map((item, index) => ({
       <img src={eachcoin.image?.small} alt={eachcoin.id} />
 
       <div>
-        <div style={{ width: "400px", height: 300 }}>
-        <ResponsiveContainer>
-          <LineChart data={formattedChartData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
-            <YAxis domain={["auto", "auto"]} />
-            <Tooltip />
-
-            <Line
-              type="monotone"
-              dataKey={statisticTyp}
-              stroke="#22c55e"
-              dot={false}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
+        <Chart  formattedChartData={formattedChartData} statisticTyp={statisticTyp}/>
         <button className="!bg-black " onClick={() => setStatisticType("prices")}>prices</button>
         <button className="!bg-black " onClick={() => setStatisticType("market_cap")}>market cap</button>
         <button className="!bg-black " onClick={() => setStatisticType("total_volumes")}>total volumes</button>
+      </div>
+      <div>
+        
+        <p className="text-blue-700">Price:<span className="text-white">{idStatics.price}</span></p>
+        <p className="text-blue-700">ATH:<span className="text-white">{idStatics.twenyfourh}</span></p>
+        <p className="text-blue-700">market cap:<span className="text-white">{getCurrentTotalVolume()}</span></p>
       </div>
       <button className="!bg-transparent" onClick={() => { setShow(!show); }}>
         <img src={closeIcon} alt="close" />

@@ -9,7 +9,7 @@ export default function CoinsSections({id,symbol, image, price,
   twenyfourh, totalvolume, show, setShow, setidStatics, idStatics}) {
       const imageHandler = ()=>{
         setShow(!show);
-        setidStatics(id)
+        setidStatics({id, price, twenyfourh})
       }  
       return (
         <>

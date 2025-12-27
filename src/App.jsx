@@ -18,7 +18,7 @@ const apiKey = import.meta.env.VITE_API_KEY;
   const [coinsdata, setCoinsData] = useState([]);
   const [Page, setPage] = useState(1);
   const [currency, setCurrency] = useState("usd");
-  const[idStatics, setidStatics] = useState("");
+  const[idStatics, setidStatics] = useState({});
   useEffect(()=>{
     const FetchingData = async ()=>{
     try{
@@ -33,32 +33,32 @@ const apiKey = import.meta.env.VITE_API_KEY;
     FetchingData();
   }, [Page, currency])
   return (
-    <>
+  <div>
+
       <Header />
       <CoinSectionHeader />
       {show &&
       <>
       <div className='top-70 absolute w-240 h-25 w-[80%] left-[10%] rounded-3xl'>
-  {coinsdata.length === 0 ? (
-  <p>Loading...</p>
-) : (
-  coinsdata.map((item) => (
-    <CoinsSections
-      key={item.id}
-      id={item.id}
-      symbol={item.symbol}
-      image={item.image}
-      price={item.current_price}
-      twenyfourh={item.price_change_percentage_24h}
-      totalvolume={item.total_volume}
-      setShow={setShow}
-      show={show}
-      setidStatics={setidStatics}
-      idStatics={idStatics}
-    />
-  ))
-)}
-
+      {coinsdata.length === 0 ? (
+      <p>Loading...</p>
+      ) : (
+        coinsdata.map((item) => (
+          <CoinsSections
+            key={item.id}
+            id={item.id}
+            symbol={item.symbol}
+            image={item.image}
+            price={item.current_price}
+            twenyfourh={item.price_change_percentage_24h}
+            totalvolume={item.total_volume}
+            setShow={setShow}
+            show={show}
+            setidStatics={setidStatics}
+            idStatics={idStatics}
+          />
+        ))
+      )}
       </div>     
       <div className='top-180 absolute w-240 h-25 w-[80%] left-[10%] rounded-3xl'>
       <PageNumber  Page={Page} setPage={setPage}/>
@@ -68,11 +68,11 @@ const apiKey = import.meta.env.VITE_API_KEY;
       </div>
       </>
       }
-       {!show && <ShowStatics idStatics={idStatics} setShow={setShow} show={show}/>}
+       {!show && <ShowStatics idStatics={idStatics} setShow={setShow} show={show} />}
       <div className='top-40 absolute w-140 h-25 w-[22%] left-25 rounded-3xl '>
       <Search />
       </div>
-    </>
+    </div>
   )
 }
 
